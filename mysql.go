@@ -15,7 +15,7 @@ const (
 		UNIQUE ver (ver)
 	) ENGINE InnoDB COLLATE 'utf8mb4_unicode_ci' CHARACTER SET 'utf8mb4';`
 
-	DefMysqlInsertVersion string = `INSERT INTO version (ver) VALUES (?);`
+	DefMysqlInsertVersion string = `INSERT INTO __version (ver) VALUES (?);`
 )
 
 type VumMysqlHandlerFunc func(*sqlx.DB) error
@@ -33,7 +33,7 @@ func (s *Schema) mysqlBuild(db *sqlx.DB, pw string, vhs *VerHandlers) error {
 	}
 
 	ver := ""
-	if err := db.Get(&ver, `SELECT ver FROM version WHERE id = (SELECT MAX(id) FROM version)`); err != nil {
+	if err := db.Get(&ver, `SELECT ver FROM __version WHERE id = (SELECT MAX(id) FROM __version)`); err != nil {
 		return err
 	}
 
