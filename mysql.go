@@ -64,7 +64,7 @@ func (s *Schema) mysqlCreateDBIfNotExists(db *sqlx.DB) error {
 	}
 
 	if !exists {
-		if _, err := db.Exec(`CREATE DATABASE '` + s.DBName + `' COLLATE 'utf8mb4_unicode_ci' CHARACTER SET 'utf8mb4';`); err != nil {
+		if _, err := db.Exec(`CREATE DATABASE ` + s.DBName + ` COLLATE 'utf8mb4_unicode_ci' CHARACTER SET 'utf8mb4';`); err != nil {
 			return err
 		}
 
