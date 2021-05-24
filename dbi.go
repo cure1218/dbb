@@ -70,7 +70,7 @@ func (dbi *DBI) protocol() string {
 	protocol := ""
 	switch dbi.Type {
 	case "mysql":
-		protocol = fmt.Sprintf("%s:%s@tcp(%s:%s)",
+		protocol = fmt.Sprintf("%s:%s@tcp(%s:%s)/",
 			dbi.AdminUser,
 			dbi.AdminPassword,
 			dbi.Host,
