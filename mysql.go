@@ -18,8 +18,6 @@ const (
 	DefMysqlInsertVersion string = `INSERT INTO __version (ver) VALUES (?);`
 )
 
-type VumMysqlHandlerFunc func(*sqlx.DB) error
-
 //================================================================
 // mysql
 //================================================================
@@ -38,7 +36,7 @@ func (s *Schema) mysqlBuild(db *sqlx.DB, pw string, vhs *VerHandlers) error {
 	}
 
 	for vh := vhs.getVerHandler(ver); vh != nil; vh = vhs.getVerHandler(ver) {
-		if handlerFunc, ok := vh.HandlerFunc.(VumMysqlHandlerFunc); !ok {
+		if handlerFunc, ok := vh.HandlerFunc.(func(*sqlx.DB) error); !ok {
 			return ErrHandlerFuncAssertFail
 		} else if err := handlerFunc(db); err != nil {
 			return err
