@@ -44,6 +44,10 @@ func (s *Schema) mysqlBuild(db *sqlx.DB, pw string, vhs *VerHandlers) error {
 			return err
 		}
 
+		if _, err := db.Exec(DefMysqlInsertVersion, vh.ToVer); err != nil {
+			return err
+		}
+
 		log.Println("Database schema from [v" + ver + "] to [v" + vh.ToVer + "] upgraded.")
 		ver = vh.ToVer
 	}
