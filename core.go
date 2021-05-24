@@ -46,7 +46,7 @@ func (vhs *VerHandlers) getVerHandler(fromV string) *VerHandler {
 //
 //================================================================
 type Schema struct {
-	DBName string
-	User   string
-	Host   string
+	DBName      string
+	AppUser     string
+	AppUserHost string
 }

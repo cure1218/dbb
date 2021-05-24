@@ -16,23 +16,23 @@ type DBI struct {
 	AdminPassword string
 }
 
-func AdminConn(typ, host, port, user, pw string) (*DBI, error) {
+func AdminConn(typ, host, port, adminUser, adminPw string) (*DBI, error) {
 	dbi := &DBI{
 		Type:          typ,
 		Host:          host,
 		Port:          port,
-		AdminUser:     user,
-		AdminPassword: pw,
+		AdminUser:     adminUser,
+		AdminPassword: adminPw,
 	}
 
 	return dbi, dbi.open()
 }
 
-func (dbi *DBI) Build(dbName, user, host, pw string, vhs *VerHandlers) error {
+func (dbi *DBI) Build(dbName, appUser, appUserHost, pw string, vhs *VerHandlers) error {
 	s := &Schema{
-		DBName: dbName,
-		User:   user,
-		Host:   host,
+		DBName:      dbName,
+		AppUser:     appUser,
+		AppUserHost: appUserHost,
 	}
 
 	switch dbi.Type {
@@ -42,6 +42,12 @@ func (dbi *DBI) Build(dbName, user, host, pw string, vhs *VerHandlers) error {
 	}
 
 	return ErrNothingChanged
+}
+
+func (dbi *DBI) CloseDB() {
+	if dbi.DB != nil {
+		dbi.DB.Close()
+	}
 }
 
 //================================================================
