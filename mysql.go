@@ -100,7 +100,7 @@ func (s *Schema) mysqlCreateUserIfNotExists(db *sqlx.DB, pw string) error {
 			return err
 		}
 
-		if _, err := db.Exec(`GRANT ALL PRIVILEGES ON '` + s.DBName + `'.* TO '` + s.AppUser + `'@'` + s.AppUserHost + `';`); err != nil {
+		if _, err := db.Exec(`GRANT ALL PRIVILEGES ON ` + s.DBName + `.* TO '` + s.AppUser + `'@'` + s.AppUserHost + `';`); err != nil {
 			return err
 		}
 
