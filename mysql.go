@@ -87,24 +87,16 @@ func (s *Schema) mysqlCreateDBIfNotExists(db *sqlx.DB) error {
 }
 
 func (s *Schema) mysqlCreateUserIfNotExists(db *sqlx.DB, pw string) error {
-	exists := false
-
-	if err := db.Get(&exists, `SELECT IF(COUNT(1), true, false) FROM mysql.user WHERE user = ? AND host = ?`, s.AppUser, s.AppUserHost); err != nil {
+	if _, err := db.Exec(`CREATE USER IF NOT EXISTS '` + s.AppUser + `'@'` + s.AppUserHost + `' IDENTIFIED BY '` + pw + `';`); err != nil {
 		return err
 	}
 
-	if !exists {
-		if _, err := db.Exec(`CREATE USER '` + s.AppUser + `'@'` + s.AppUserHost + `' IDENTIFIED BY '` + pw + `';`); err != nil {
-			return err
-		}
+	if _, err := db.Exec(`GRANT ALL PRIVILEGES ON ` + s.DBName + `.* TO '` + s.AppUser + `'@'` + s.AppUserHost + `';`); err != nil {
+		return err
+	}
 
-		if _, err := db.Exec(`GRANT ALL PRIVILEGES ON ` + s.DBName + `.* TO '` + s.AppUser + `'@'` + s.AppUserHost + `';`); err != nil {
-			return err
-		}
-
-		if _, err := db.Exec(`FLUSH PRIVILEGES;`); err != nil {
-			return err
-		}
+	if _, err := db.Exec(`FLUSH PRIVILEGES;`); err != nil {
+		return err
 	}
 
 	return nil
